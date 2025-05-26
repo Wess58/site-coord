@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
-  data: any[] = [];
+  data: any[] = [] ;
   loading = false;
 
   constructor(private http: HttpClient) { }
@@ -36,9 +36,6 @@ export class HomeComponent {
         county: 'Loading...'
       }));
 
-      console.log(this.data);
-      
-
       this.resolveCounties();
     };
 
@@ -50,19 +47,23 @@ export class HomeComponent {
   resolveCounties() {
     this.loading = true;
     this.data.forEach((coord, index) => {
-      const url = `https://nominatim.openstreetmap.org/reverse?lat=${coord.latitude}&lon=${coord.longitude}&format=json&zoom=10`;
 
-      this.http.get(url).subscribe({
-        next: (res: any) => {
-          this.data[index].county = res?.address?.county || res?.address?.state || 'Unknown';
-        },
-        error: () => {
-          this.data[index].county = 'Error';
-        },
-        complete: () => {
-          if (index === this.data.length - 1) this.loading = false;
-        }
-      });
+      setTimeout(() => {
+        const url = `https://nominatim.openstreetmap.org/reverse?lat=${coord.latitude}&lon=${coord.longitude}&format=json&zoom=10`;
+
+        this.http.get(url).subscribe({
+          next: (res: any) => {
+            this.data[index].county = res?.address?.county || res?.address?.state || 'Unknown';
+          },
+          error: () => {
+            this.data[index].county = 'Error';
+          },
+          complete: () => {
+            if (index === this.data.length - 1) this.loading = false;
+          }
+        });
+      }, 1100 * (index + 1));
+
     });
   }
 
