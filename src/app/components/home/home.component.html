@@ -1,0 +1,27 @@
+<div class="upload-section">
+  <input type="file" (change)="onFileChange($event)" accept=".xlsx, .xls" />
+</div>
+
+<br><br>
+<button (click)="generateExcel()">Download data</button>
+
+<div *ngIf="loading">Loading counties...</div>
+
+<table *ngIf="data.length">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Latitude</th>
+      <th>Longitude</th>
+      <th>County</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let row of data; let i = index">
+      <td>{{ i + 1 }}</td>
+      <td>{{ row.latitude }}</td>
+      <td>{{ row.longitude }}</td>
+      <td>{{ row.county }}</td>
+    </tr>
+  </tbody>
+</table>
